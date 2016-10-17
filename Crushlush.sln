@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crushlush.Web", "Crushlush.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crushlush.Tests", "Crushlush.Tests\Crushlush.Tests.csproj", "{1489773F-0B1A-44D6-B215-4CA66FCDA928}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crushlush.Core", "Crushlush.Core\Crushlush.Core.csproj", "{AE9E8294-09F3-4C8B-B24C-297498B3FFD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1489773F-0B1A-44D6-B215-4CA66FCDA928}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1489773F-0B1A-44D6-B215-4CA66FCDA928}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1489773F-0B1A-44D6-B215-4CA66FCDA928}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE9E8294-09F3-4C8B-B24C-297498B3FFD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE9E8294-09F3-4C8B-B24C-297498B3FFD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE9E8294-09F3-4C8B-B24C-297498B3FFD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE9E8294-09F3-4C8B-B24C-297498B3FFD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
