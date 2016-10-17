@@ -1,5 +1,5 @@
 ﻿
-<div class="center-content">
+<div class="center-content" ng-controller="HomeController as model">
 
     <div class="row">
         <div class="col-md-12">
@@ -12,21 +12,23 @@
         <div class="col-md-12">
             <p>
                 <ul class="list-inline">
-                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><i class="fa fa-plus" aria-hidden="true"></i> New playlist</li>
+                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><a href="javascript:void(0)" ng-click="model.newPlayList()"><i class="fa fa-plus" aria-hidden="true"></i> New playlist</a></li>
                 </ul>
             </p>
             <div class="clearfix"></div>
         </div>
         <div class="col-md-12">
-            
+            <h2 style="font-family: 'Shadows Into Light', cursive;font-size:25pt">
+                <i class="fa fa-music" aria-hidden="true"></i> <input type="text" placeholder="name new playlist" style="background:none;border:0px;color:#fff" />
+            </h2>
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true">
                 <h2 style="font-family: 'Shadows Into Light', cursive;font-size:25pt">
                     <i class="fa fa-music" aria-hidden="true"></i> Soopadoopa evening rock
                     <span class="caret"></span>
-                </h2> 
+                </h2>
             </a>
             <ul class="dropdown-menu playlist">
-                <li><a href="#dropdown1" data-toggle="tab">Action</a></li>
+                <li><a href="#dropdown1" data-toggle="tab">My Crushlush Playlists</a></li>
                 <li class="divider"></li>
                 <li><a href="#dropdown2" data-toggle="tab">Another action</a></li>
             </ul>
@@ -36,7 +38,7 @@
                 <li style="font-family: 'Indie Flower', cursive;font-size:25pt"><b>1.</b> Track 1</li>
                 <li style="font-family: 'Indie Flower', cursive;font-size:25pt"><b>1.</b> Track 1</li>
                 <li style="font-family: 'Indie Flower', cursive;font-size:25pt"><b>1.</b> Track 1</li>
-                
+
             </ul>
             <ul class="list-unstyled">
                 <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><i class="fa fa-plus" aria-hidden="true"></i> New Track</li>
@@ -49,3 +51,7 @@
         <p>&copy; @DateTime.Now.Year - @ConfigurationManager.AppSettings["AppTitle"]</p>
     </footer>
 </div>
+
+@section scripts{
+    <script src="~/Scripts/App/playlist/controllers/HomeController.js"></script>
+}
