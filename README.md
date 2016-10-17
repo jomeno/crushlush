@@ -1,2 +1,2 @@
 # crushlush
-A small ASP.NET music playlist app
+Write a small music playlist app. Write a test for it when done.
