@@ -176,7 +176,9 @@
         this.Api = <Api>{};
         var base = "/api/";
         this.Api.Playlists = base + "playlists";
+        this.Api.Playlist = (params: string[]) => { return base + "playlists/" + params[0] };
         this.Api.PlaylistTracks = base + "playlisttracks";
+        this.Api.DeletePlaylist = (params: string[]) => { return base + "playlists/" + params[0]; };
 
     }
 }

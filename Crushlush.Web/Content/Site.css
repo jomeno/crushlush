@@ -15,7 +15,7 @@ body {
 
 .center-content {
     position: absolute;
-    top: 45%;
+    top: 50%;
     left: 45%;
     transform: translate(-50%, -50%);
 }

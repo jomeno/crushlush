@@ -45,6 +45,8 @@ var HomeController = (function () {
             // fire off call to create new playlist in db
             this.data.post(this.data.Api.Playlists, this.Dashboard.Playlist).then(function (result) {
                 _this.Dashboard.Playlists.push(result);
+                _this.Dashboard.Playlist = result;
+                console.log(_this.Dashboard.Playlist);
                 _this.Dashboard.Playlist.IsEditing = false;
             }).catch(function (e) {
                 // TODO: something really bad happened, send to error log, possbily call admin attention
@@ -68,6 +70,46 @@ var HomeController = (function () {
             });
         }
     };
+    // fetch playlist tracks
+    HomeController.prototype.selectPlaylist = function (playlist) {
+        var _this = this;
+        if (playlist == null) {
+            this.data.toast.pop(true, { Message: 'Select a playlist to view tracks' });
+            return false;
+        }
+        this.data.get(this.data.Api.Playlist([playlist.PlaylistID])).then(function (result) {
+            _this.Dashboard.Playlist = result;
+        }).catch(function (e) {
+            // TODO: something really bad happened, send to error log, possbily call admin attention
+            // console.log(e)
+        });
+    };
+    // delete a playlist
+    HomeController.prototype.deletePlaylist = function (playlist) {
+        var _this = this;
+        if (playlist == null) {
+            this.data.toast.pop(true, { Message: 'Select a playlist to delete' });
+            return false;
+        }
+        this.data.delete(this.data.Api.DeletePlaylist([playlist.PlaylistID])).then(function (result) {
+            // remove playlist from Playlist array
+            for (var i = 0; i < _this.Dashboard.Playlists.length; i++) {
+                var plist = _this.Dashboard.Playlists[i];
+                if (plist.PlaylistID == _this.Dashboard.Playlist.PlaylistID) {
+                    _this.Dashboard.Playlists.splice(i, 1);
+                }
+            }
+            _this.Dashboard.Playlist = _this.Dashboard.Playlists[0];
+            if (_this.Dashboard.Playlist != null) {
+                // retrieve playlist tracks
+                _this.selectPlaylist(_this.Dashboard.Playlist);
+            }
+        }).catch(function (e) {
+            // TODO: something really bad happened, send to error log, possbily call admin attention
+            // console.log(e)
+        });
+    };
     return HomeController;
 })();
 playlist.controller("HomeController", HomeController);
+//# sourceMappingURL=HomeController.js.map

@@ -8,20 +8,20 @@
             </h1>
         </div>
     </div>
-    <div class="row" style="height:400px">
+    <div class="row">
         <div class="col-md-12">
             <p>
-                <ul class="list-inline">                    
-                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing" ng-click="model.deletePlaylist()"><i class="fa fa-times" aria-hidden="true"></i> Delete</a></li>                    
-                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt"><a href="javascript:void(0)" class="ng-cloak" ng-hide="model.Dashboard.Playlist.IsEditing" ng-click="model.createPlaylist()"><i class="fa fa-plus" aria-hidden="true"></i> New</a></li> 
-                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist.IsEditing" ng-click="model.cancelCreatePlaylist()"><i class="fa fa-stop" aria-hidden="true"></i> Cancel</a></li>               
+                <ul class="list-inline">
+                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing" ng-click="model.deletePlaylist(model.Dashboard.Playlist)"><i class="fa fa-times" aria-hidden="true"></i> Delete</a></li>
+                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt"><a href="javascript:void(0)" class="ng-cloak" ng-hide="model.Dashboard.Playlist.IsEditing" ng-click="model.createPlaylist()"><i class="fa fa-plus" aria-hidden="true"></i> New</a></li>
+                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist.IsEditing" ng-click="model.cancelCreatePlaylist()"><i class="fa fa-stop" aria-hidden="true"></i> Cancel</a></li>
                 </ul>
             </p>
             <div class="clearfix"></div>
         </div>
         <div class="col-md-12">
             <!-- Create new playlist -->
-            <div class="ng-cloak" ng-hide="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing">
+            <div class="ng-cloak" ng-show="model.Dashboard.Playlist.IsEditing">
                 <h2 style="font-family: 'Shadows Into Light', cursive;font-size:25pt">
                     <i class="fa fa-music" aria-hidden="true"></i> <input type="text" ng-model="model.Dashboard.Playlist.Name" placeholder="name your playlist" maxlength="20" style="background:none;border:0px;color:#fff" />
                 </h2>
@@ -41,9 +41,9 @@
                     </h2>
                 </a>
                 <ul class="dropdown-menu playlist">
-                    <li><a href="#dropdown1" data-toggle="tab">My Crushlush Playlists</a></li>
+                    <li><a href="javascript:void(0)">My Crushlush Playlists</a></li>
                     <li class="divider"></li>
-                    <li ng-repeat="plist in model.Dashboard.Playlists track by $index"><a href="#dropdown2" data-toggle="tab"><b ng-bind="(($index + 1) + '.')"></b> <span ng-bind="plist.Name"></span></a></li>
+                    <li ng-repeat="plist in model.Dashboard.Playlists track by $index" ng-click="model.selectPlaylist(plist)"><a href="javascript:void(0)"><b ng-bind="(($index + 1) + '.')"></b> <span ng-bind="plist.Name"></span></a></li>
                 </ul>
 
 
@@ -51,7 +51,7 @@
 
         </div>
 
-        <div class="col-md-12" ng-show="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing">
+        <div class="col-md-12" ng-show="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing" style="height:400px;overflow-y:hidden">
             <!--  View playlist tracks -->
             <ul class="list-unstyled">
                 <li style="font-family: 'Indie Flower', cursive;font-size:25pt" ng-repeat="ptrack in model.Dashboard.Playlist.Tracks track by $index"><b ng-bind="(($index + 1) + '.')"></b> <span ng-bind="ptrack.Name"></span></li>
@@ -73,6 +73,12 @@
 
     <hr />
     <div class="row">
+        <div class="col-md-12">
+            <audio controls autoplay loop>
+                <source src="~/Content/Music/05-Crows.mp3" type="audio/mpeg" />
+                Your browser does not support the audio element.
+            </audio>
+        </div>
         <div class="col-md-12">
             <!-- Social sharing -->
             <h6>Be sporty, share your groove!</h6>

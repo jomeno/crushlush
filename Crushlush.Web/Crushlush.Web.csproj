@@ -170,6 +170,10 @@
     <Content Include="Content\Libs\toaster\toaster.js" />
     <Content Include="Content\Libs\toaster\toaster.min.css" />
     <Content Include="Content\Libs\toaster\toaster.min.js" />
+    <Content Include="Content\Music\01-Song-from-the-Styx.mp3" />
+    <Content Include="Content\Music\02-Man-with-the-Keys.mp3" />
+    <Content Include="Content\Music\03-Epitaph.mp3" />
+    <Content Include="Content\Music\05-Crows.mp3" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

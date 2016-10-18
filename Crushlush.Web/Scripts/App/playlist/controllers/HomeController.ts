@@ -62,6 +62,8 @@
             // fire off call to create new playlist in db
             this.data.post<Playlist>(this.data.Api.Playlists, this.Dashboard.Playlist).then(result=> {
                 this.Dashboard.Playlists.push(result);
+                this.Dashboard.Playlist = result;
+                console.log(this.Dashboard.Playlist)
                 this.Dashboard.Playlist.IsEditing = false;
             }).catch(e=> {
                 // TODO: something really bad happened, send to error log, possbily call admin attention
@@ -90,6 +92,50 @@
 
     }
 
+    // fetch playlist tracks
+    selectPlaylist(playlist: Playlist) {
+        if (playlist == null) {
+            this.data.toast.pop(true, <any>{ Message: 'Select a playlist to view tracks' });
+            return false;
+        }
+
+        this.data.get<Playlist>(this.data.Api.Playlist([playlist.PlaylistID])).then(result => {
+            this.Dashboard.Playlist = result;
+
+        }).catch(e=> {
+            // TODO: something really bad happened, send to error log, possbily call admin attention
+            // console.log(e)
+        });
+    }
+
+    // delete a playlist
+    deletePlaylist(playlist: Playlist) {
+        if (playlist == null) {
+            this.data.toast.pop(true, <any>{ Message: 'Select a playlist to delete' });
+            return false
+        }
+
+        this.data.delete<number>(this.data.Api.DeletePlaylist([playlist.PlaylistID])).then(result=> {
+
+            // remove playlist from Playlist array
+            for (var i = 0; i < this.Dashboard.Playlists.length; i++) {
+                var plist = this.Dashboard.Playlists[i];
+                if (plist.PlaylistID == this.Dashboard.Playlist.PlaylistID) {
+                    this.Dashboard.Playlists.splice(i, 1);
+                }
+            }
+
+            this.Dashboard.Playlist = this.Dashboard.Playlists[0];
+            if (this.Dashboard.Playlist != null) {
+                // retrieve playlist tracks
+                this.selectPlaylist(this.Dashboard.Playlist);
+            }
+
+        }).catch(e=> {
+            // TODO: something really bad happened, send to error log, possbily call admin attention
+            // console.log(e)
+        });
+    }
 
 }
 

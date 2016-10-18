@@ -28,9 +28,11 @@ namespace Crushlush.Web.Api.Controllers
         }
 
         // GET api/<controller>/5
-        public string Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            var playlistId = id;
+            var operation = playlistManager.GetPlaylists(playlistId);
+            return Ok(operation);
         }
 
         // POST api/<controller>
@@ -64,8 +66,12 @@ namespace Crushlush.Web.Api.Controllers
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
+            var playlistId = id;
+            var operation = playlistManager.DeletePlaylist(playlistId);
+            if (operation.Succeeded) operation.Message = "Playlist was deleted successfully.";
+            return Ok(operation);
         }
     }
 }

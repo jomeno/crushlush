@@ -39,6 +39,28 @@ namespace Crushlush.Core.Managers
             return operation;
         }
 
+        public Operation<PlaylistModel> GetPlaylists(int playlistId)
+        {
+            var operation = Operation.Create(() =>
+            {
+                var playlist = (from plist in _db.Playlists where plist.PlaylistID == playlistId select plist).Include("PlaylistTracks.Track").FirstOrDefault();
+                if (playlist == null) throw new Exception("Playlist not found");
+
+                var playlistModel = new PlaylistModel(playlist);
+                var trackModels = playlist.PlaylistTracks.Select(plistTrack =>
+                {
+                    var track = new TrackModel(plistTrack.Track);
+                    return track;
+                }).ToList();
+
+                playlistModel.Tracks = trackModels;
+
+                return playlistModel;
+            });
+
+            return operation;
+        }
+
         public Operation<List<TrackModel>> GetPlaylistTracks(int playlistId)
         {
             // fetch trakcs by playlists
@@ -194,11 +216,11 @@ namespace Crushlush.Core.Managers
 
         #region Delete Operations
 
-        public Operation<PlaylistModel> DeletePlaylist(PlaylistModel model)
+        public Operation<int> DeletePlaylist(int playlistId)
         {
             var operation = Operation.Create(() =>
             {
-                var playlist = (from plist in _db.Playlists where plist.PlaylistID == model.PlaylistID select plist).FirstOrDefault();
+                var playlist = (from plist in _db.Playlists where plist.PlaylistID == playlistId select plist).FirstOrDefault();
                 if (playlist == null) throw new Exception("Playlist not found.");
 
                 // remove specified playlist
@@ -207,7 +229,7 @@ namespace Crushlush.Core.Managers
                 // persist changes to database
                 _db.SaveChanges();
 
-                return model;
+                return playlistId;
             });
             return operation;
         }

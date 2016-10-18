@@ -148,7 +148,9 @@ var DataService = (function () {
         this.Api = {};
         var base = "/api/";
         this.Api.Playlists = base + "playlists";
+        this.Api.Playlist = function (params) { return base + "playlists/" + params[0]; };
         this.Api.PlaylistTracks = base + "playlisttracks";
+        this.Api.DeletePlaylist = function (params) { return base + "playlists/" + params[0]; };
     };
     return DataService;
 })();
@@ -178,3 +180,4 @@ var Toast = (function () {
     return Toast;
 })();
 app.service("_data", DataService);
+//# sourceMappingURL=DataService.js.map
