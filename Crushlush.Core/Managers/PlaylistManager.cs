@@ -178,13 +178,44 @@ namespace Crushlush.Core.Managers
 
                 model.Update(playlist);
 
-                // update any changes to tracks
+                // create any new tracks if they don't exist
+                //TODO: requires enhancement
+
+                var newTracks = new List<Track>();
+                model.Tracks.ForEach(t =>
+                {
+                    // if track id is 0 then it must be a new track
+                    if (t.TrackID == 0)
+                    {
+                        newTracks.Add(t.Create());
+                    }
+                });
+                _db.Tracks.AddRange(newTracks);
+
+                // update any changes to existing tracks
                 var tracks = playlist.PlaylistTracks.Select(plistTrack => { return plistTrack.Track; }).ToList();
                 tracks.ForEach(track =>
                 {
                     var trackModel = model.Tracks.Where(trackM => trackM.TrackID == track.TrackID).FirstOrDefault();
                     trackModel.Update(track);
                 });
+
+                // persist changes to database
+                _db.SaveChanges();
+
+                // add newly added tracks to playlisttracks
+                var playlistTracks = newTracks.Select(t =>
+                {
+                    var playlistTrack = new PlaylistTrack()
+                    {
+                        PlaylistID = playlist.PlaylistID,
+                        TrackID = t.TrackID
+                    };
+
+                    return playlistTrack;
+
+                }).ToList();
+                _db.PlaylistTracks.AddRange(playlistTracks);
 
                 // persist changes to database
                 _db.SaveChanges();
