@@ -190,14 +190,19 @@ namespace Crushlush.Core.Managers
                         newTracks.Add(t.Create());
                     }
                 });
-                _db.Tracks.AddRange(newTracks);
+
+                // only add if tehre are any tracks
+                if (newTracks.Count > 0) _db.Tracks.AddRange(newTracks);
 
                 // update any changes to existing tracks
                 var tracks = playlist.PlaylistTracks.Select(plistTrack => { return plistTrack.Track; }).ToList();
                 tracks.ForEach(track =>
                 {
                     var trackModel = model.Tracks.Where(trackM => trackM.TrackID == track.TrackID).FirstOrDefault();
-                    trackModel.Update(track);
+                    if (trackModel != null)
+                    {
+                        trackModel.Update(track);
+                    }
                 });
 
                 // persist changes to database
@@ -219,6 +224,15 @@ namespace Crushlush.Core.Managers
 
                 // persist changes to database
                 _db.SaveChanges();
+
+                // get all tracks afresh
+                var allTracks = (from plist in _db.PlaylistTracks
+                                 where plist.PlaylistID == model.PlaylistID
+                                 join track in _db.Tracks on plist.TrackID equals track.TrackID
+                                 select track).ToList();
+
+                // project out trackmodel
+                model.Tracks = allTracks.Select(t => { return new TrackModel(t); }).ToList();
 
                 return model;
             });
