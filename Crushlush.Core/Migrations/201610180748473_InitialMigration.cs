@@ -3,7 +3,7 @@ namespace Crushlush.Core.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialMigrations : DbMigration
+    public partial class InitialMigration : DbMigration
     {
         public override void Up()
         {
@@ -20,6 +20,20 @@ namespace Crushlush.Core.Migrations
                 .PrimaryKey(t => t.PlaylistID);
             
             CreateTable(
+                "dbo.PlaylistTracks",
+                c => new
+                    {
+                        PlaylistTrackID = c.Int(nullable: false, identity: true),
+                        PlaylistID = c.Int(nullable: false),
+                        TrackID = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.PlaylistTrackID)
+                .ForeignKey("dbo.Tracks", t => t.TrackID, cascadeDelete: false)
+                .ForeignKey("dbo.Playlists", t => t.PlaylistID, cascadeDelete: false)
+                .Index(t => t.PlaylistID)
+                .Index(t => t.TrackID);
+            
+            CreateTable(
                 "dbo.Tracks",
                 c => new
                     {
@@ -30,35 +44,19 @@ namespace Crushlush.Core.Migrations
                         CreatedAt = c.DateTime(nullable: false),
                         ModifiedAt = c.DateTime(),
                         IsActive = c.Boolean(nullable: false),
-                        Playlist_PlaylistID = c.Int(),
-                        PlaylistTrack_PlaylistTrackID = c.Int(),
                     })
-                .PrimaryKey(t => t.TrackID)
-                .ForeignKey("dbo.Playlists", t => t.Playlist_PlaylistID)
-                .ForeignKey("dbo.PlaylistTracks", t => t.PlaylistTrack_PlaylistTrackID)
-                .Index(t => t.Playlist_PlaylistID)
-                .Index(t => t.PlaylistTrack_PlaylistTrackID);
-            
-            CreateTable(
-                "dbo.PlaylistTracks",
-                c => new
-                    {
-                        PlaylistTrackID = c.Int(nullable: false, identity: true),
-                        PlaylistID = c.Int(nullable: false),
-                        TrackID = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.PlaylistTrackID);
+                .PrimaryKey(t => t.TrackID);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.Tracks", "PlaylistTrack_PlaylistTrackID", "dbo.PlaylistTracks");
-            DropForeignKey("dbo.Tracks", "Playlist_PlaylistID", "dbo.Playlists");
-            DropIndex("dbo.Tracks", new[] { "PlaylistTrack_PlaylistTrackID" });
-            DropIndex("dbo.Tracks", new[] { "Playlist_PlaylistID" });
-            DropTable("dbo.PlaylistTracks");
+            DropForeignKey("dbo.PlaylistTracks", "PlaylistID", "dbo.Playlists");
+            DropForeignKey("dbo.PlaylistTracks", "TrackID", "dbo.Tracks");
+            DropIndex("dbo.PlaylistTracks", new[] { "TrackID" });
+            DropIndex("dbo.PlaylistTracks", new[] { "PlaylistID" });
             DropTable("dbo.Tracks");
+            DropTable("dbo.PlaylistTracks");
             DropTable("dbo.Playlists");
         }
     }

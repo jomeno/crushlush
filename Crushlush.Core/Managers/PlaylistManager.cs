@@ -2,6 +2,7 @@
 using Crushlush.Core.Data;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,52 +70,78 @@ namespace Crushlush.Core.Managers
 
         public Operation<PlaylistModel> CreatePlaylist(PlaylistModel model)
         {
+            // 1. create a playlist if it doesn't already exist,
+            // 2. create the tracks if they don't exist
+            // 3. add tracks to playlisttracks
+
             var operation = Operation.Create(() =>
             {
+                // 1. create a playlist if it doesn't already exist,
                 var playlist = (from plist in _db.Playlists where plist.Name == model.Name select plist).FirstOrDefault();
                 if (playlist != null) throw new Exception(string.Format("A playlist named {0} already exists", model.Name));
 
                 var newPlaylist = model.Create();
                 _db.Playlists.Add(newPlaylist);
 
-                // persist changes to db
+                // 2. create the tracks if they don't exist TODO: requires enhancement
+                var newTracks = model.Tracks.Select(t => t.Create()).ToList();
+                _db.Tracks.AddRange(newTracks);
+
+                // persist changes to database
+                _db.SaveChanges();
+
+                // 3. add tracks to playlisttracks
+                var playlistTracks = newTracks.Select(t =>
+                {
+                    var playlistTrack = new PlaylistTrack()
+                    {
+                        PlaylistID = newPlaylist.PlaylistID,
+                        TrackID = t.TrackID
+                    };
+
+                    return playlistTrack;
+
+                }).ToList();
+                _db.PlaylistTracks.AddRange(playlistTracks);
+
+                // persist changes to database
                 _db.SaveChanges();
 
                 // assign id of newly created playlist to the model
                 model.PlaylistID = newPlaylist.PlaylistID;
+                model.Tracks = newTracks.Select(t => { return new TrackModel(t); }).ToList();
 
                 return model;
             });
             return operation;
         }
 
-        public Operation<PlaylistTrackModel> CreatePlaylistTrack(PlaylistTrackModel model)
-        {
-            var operation = Operation.Create(() =>
-            {
-                if (model.PlaylistID == 0)
-                {
-                    // create a new playlist first before creating a playlist track
+        //public Operation<PlaylistTrackModel> CreatePlaylistTrack(PlaylistTrackModel model)
+        //{
+        //    var operation = Operation.Create(() =>
+        //    {
+        //        if (model.PlaylistID == 0)
+        //        {
+        //            // create a new playlist first before creating a playlist track
 
-                }
+        //        }
 
+        //        var playlistTrack = (from plistTrack in _db.PlaylistTracks where plistTrack.PlaylistID == model.PlaylistID && plistTrack.TrackID == model.TrackID select plistTrack).FirstOrDefault();
+        //        if (playlistTrack != null) throw new Exception("This track is already in your playlist");
 
-                var playlistTrack = (from plistTrack in _db.PlaylistTracks where plistTrack.PlaylistID == model.PlaylistID && plistTrack.TrackID == model.TrackID select plistTrack).FirstOrDefault();
-                if (playlistTrack != null) throw new Exception("This track is already in your playlist");
+        //        var newPlaylistTrack = model.Create();
+        //        _db.PlaylistTracks.Add(newPlaylistTrack);
 
-                var newPlaylistTrack = model.Create();
-                _db.PlaylistTracks.Add(newPlaylistTrack);
+        //        // persist changes to database
+        //        _db.SaveChanges();
 
-                // persist changes to db
-                _db.SaveChanges();
+        //        // assign id of newly created playlistTrack to the model
+        //        model.PlaylistTrackID = newPlaylistTrack.PlaylistTrackID;
 
-                // assign id of newly created playlistTrack to the model
-                model.PlaylistTrackID = newPlaylistTrack.PlaylistTrackID;
-
-                return model;
-            });
-            return operation;
-        }
+        //        return model;
+        //    });
+        //    return operation;
+        //}
 
         #endregion
 
@@ -124,12 +151,20 @@ namespace Crushlush.Core.Managers
         {
             var operation = Operation.Create(() =>
             {
-                var playlist = (from plist in _db.Playlists where plist.PlaylistID == model.PlaylistID select plist).FirstOrDefault();
+                var playlist = (from plist in _db.Playlists where plist.PlaylistID == model.PlaylistID select plist).Include("PlaylistTracks.Track").FirstOrDefault();
                 if (playlist == null) throw new Exception("Playlist not found");
 
                 model.Update(playlist);
 
-                // persist changes to db
+                // update any changes to tracks
+                var tracks = playlist.PlaylistTracks.Select(plistTrack => { return plistTrack.Track; }).ToList();
+                tracks.ForEach(track =>
+                {
+                    var trackModel = model.Tracks.Where(trackM => trackM.TrackID == track.TrackID).FirstOrDefault();
+                    trackModel.Update(track);
+                });
+
+                // persist changes to database
                 _db.SaveChanges();
 
                 return model;
@@ -146,7 +181,7 @@ namespace Crushlush.Core.Managers
 
                 model.Update(track);
 
-                // persist changes to db
+                // persist changes to database
                 _db.SaveChanges();
 
                 return model;
@@ -169,7 +204,7 @@ namespace Crushlush.Core.Managers
                 // remove specified playlist
                 _db.Playlists.Remove(playlist);
 
-                // persist changes to db
+                // persist changes to database
                 _db.SaveChanges();
 
                 return model;
@@ -187,7 +222,7 @@ namespace Crushlush.Core.Managers
                 // remove specified playlist track
                 _db.PlaylistTracks.Remove(playlistTrack);
 
-                // persist changes to db
+                // persist changes to database
                 _db.SaveChanges();
 
                 return model;

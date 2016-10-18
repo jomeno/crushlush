@@ -3,50 +3,87 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h1 style="font-family: 'Indie Flower', cursive;font-size:50pt">
+            <h1 style="font-family: 'Indie Flower', cursive;font-size:50pt;text-shadow:2px 2px #000;">
                 My <br /> crushlush <br /> playlists
             </h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="height:400px">
         <div class="col-md-12">
             <p>
-                <ul class="list-inline">
-                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><a href="javascript:void(0)" ng-click="model.newPlayList()"><i class="fa fa-plus" aria-hidden="true"></i> New playlist</a></li>
+                <ul class="list-inline">                    
+                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing" ng-click="model.deletePlaylist()"><i class="fa fa-times" aria-hidden="true"></i> Delete</a></li>                    
+                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt"><a href="javascript:void(0)" class="ng-cloak" ng-hide="model.Dashboard.Playlist.IsEditing" ng-click="model.createPlaylist()"><i class="fa fa-plus" aria-hidden="true"></i> New</a></li> 
+                    <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist.IsEditing" ng-click="model.cancelCreatePlaylist()"><i class="fa fa-stop" aria-hidden="true"></i> Cancel</a></li>               
                 </ul>
             </p>
             <div class="clearfix"></div>
         </div>
         <div class="col-md-12">
-            <h2 style="font-family: 'Shadows Into Light', cursive;font-size:25pt">
-                <i class="fa fa-music" aria-hidden="true"></i> <input type="text" placeholder="name new playlist" style="background:none;border:0px;color:#fff" />
-            </h2>
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true">
+            <!-- Create new playlist -->
+            <div class="ng-cloak" ng-hide="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing">
                 <h2 style="font-family: 'Shadows Into Light', cursive;font-size:25pt">
-                    <i class="fa fa-music" aria-hidden="true"></i> Soopadoopa evening rock
-                    <span class="caret"></span>
+                    <i class="fa fa-music" aria-hidden="true"></i> <input type="text" ng-model="model.Dashboard.Playlist.Name" placeholder="name your playlist" maxlength="20" style="background:none;border:0px;color:#fff" />
                 </h2>
-            </a>
-            <ul class="dropdown-menu playlist">
-                <li><a href="#dropdown1" data-toggle="tab">My Crushlush Playlists</a></li>
-                <li class="divider"></li>
-                <li><a href="#dropdown2" data-toggle="tab">Another action</a></li>
+                <ul class="list-unstyled">
+                    <li ng-repeat="ptrack in model.Dashboard.Playlist.Tracks track by $index" style="font-family: 'Indie Flower', cursive;font-size:25pt"><b ng-bind="(($index + 1) + '.')"></b> <input type="text" ng-model="ptrack.Name" placeholder="track name" style="background:none;border:0px;color:#fff" /></li>
+                </ul>
+            </div>
+
+
+            <div ng-show="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing">
+
+                <!--  Playlist dropdown -->
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="true">
+                    <h2 style="font-family: 'Shadows Into Light', cursive;font-size:25pt" class="truncate">
+                        <i class="fa fa-music" aria-hidden="true"></i> <span ng-bind="model.Dashboard.Playlist.Name"></span>
+                        <span class="caret"></span>
+                    </h2>
+                </a>
+                <ul class="dropdown-menu playlist">
+                    <li><a href="#dropdown1" data-toggle="tab">My Crushlush Playlists</a></li>
+                    <li class="divider"></li>
+                    <li ng-repeat="plist in model.Dashboard.Playlists track by $index"><a href="#dropdown2" data-toggle="tab"><b ng-bind="(($index + 1) + '.')"></b> <span ng-bind="plist.Name"></span></a></li>
+                </ul>
+
+
+            </div>
+
+        </div>
+
+        <div class="col-md-12" ng-show="model.Dashboard.Playlist != null && !model.Dashboard.Playlist.IsEditing">
+            <!--  View playlist tracks -->
+            <ul class="list-unstyled">
+                <li style="font-family: 'Indie Flower', cursive;font-size:25pt" ng-repeat="ptrack in model.Dashboard.Playlist.Tracks track by $index"><b ng-bind="(($index + 1) + '.')"></b> <span ng-bind="ptrack.Name"></span></li>
             </ul>
         </div>
-        <div class="col-md-12">
-            <ul class="list-unstyled">
-                <li style="font-family: 'Indie Flower', cursive;font-size:25pt"><b>1.</b> Track 1</li>
-                <li style="font-family: 'Indie Flower', cursive;font-size:25pt"><b>1.</b> Track 1</li>
-                <li style="font-family: 'Indie Flower', cursive;font-size:25pt"><b>1.</b> Track 1</li>
 
-            </ul>
-            <ul class="list-unstyled">
-                <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><i class="fa fa-plus" aria-hidden="true"></i> New Track</li>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!--  Command actions -->
+            <ul class="list-inline">
+                <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist.IsEditing" ng-click="model.savePlaylist()"><i class="fa fa-save" aria-hidden="true"></i> Save</a></li>
+                <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt" class="pull-right ng-cloak" ng-hide="model.Dashboard.Playlist == null || model.Dashboard.Playlist.IsEditing"><a href="javascript:void(0)" ng-click="model.editPlaylist()"><i class="fa fa-edit" aria-hidden="true"></i> <span ng-bind="model.Dashboard.Playlist.IsEditing ? 'Cancel changes' : 'Edit playlist'"> </span></a></li>
+                <li style="font-family: 'Shadows Into Light', cursive;font-size:16pt"><a href="javascript:void(0)" class="ng-cloak" ng-show="model.Dashboard.Playlist != null" ng-click="model.createTrack()"><i class="fa fa-plus" aria-hidden="true"></i> New track</a></li>
             </ul>
         </div>
     </div>
 
     <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Social sharing -->
+            <h6>Be sporty, share your groove!</h6>
+            <a class="fa fa-twitter-square" style="font-size:30pt" href="https://twitter.com/intent/tweet?text=I%20just%20want%20to%20share%20with%20you%20my%20groove%20on%20http://crushlush.azurewebsites.net" data-size="large">
+            </a>
+            &nbsp;
+            <a class="fa fa-facebook-square" style="font-size:30pt" href="#" data-size="large">
+            </a>
+        </div>
+    </div>
+    <br />
     <footer>
         <p>&copy; @DateTime.Now.Year - @ConfigurationManager.AppSettings["AppTitle"]</p>
     </footer>

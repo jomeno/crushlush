@@ -11,10 +11,10 @@ namespace Crushlush.Core.Data
     {
         [Key]
         public int PlaylistID { get; set; }
-        public string Name { get; set; }
-        public ICollection<Track> Tracks { get; set; }
+        public string Name { get; set; }        
         public DateTime CreatedAt { get; set; }
         public DateTime? ModifiedAt { get; set; }
         public bool IsActive { get; set; }
+        public ICollection<PlaylistTrack> PlaylistTracks { get; set; }
     }
 }

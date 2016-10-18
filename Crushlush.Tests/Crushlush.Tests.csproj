@@ -34,7 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -92,8 +94,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crushlush.Core\Crushlush.Core.csproj">
+      <Project>{ae9e8294-09f3-4c8b-b24c-297498b3ffd8}</Project>
+      <Name>Crushlush.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crushlush.Web\Crushlush.Web.csproj">
-      <Project>{3270C32C-C76A-4A81-803F-45D80E5495BC}</Project>
+      <Project>{3270c32c-c76a-4a81-803f-45d80e5495bc}</Project>
       <Name>Crushlush.Web</Name>
     </ProjectReference>
   </ItemGroup>

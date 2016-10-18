@@ -11,7 +11,7 @@ namespace Crushlush.Core.Data
         public int PlaylistTrackID { get; set; }
         public int PlaylistID { get; set; }
         public int TrackID { get; set; }
-        public ICollection<Track> Tracks { get; set; }
+        public Track Track { get; set; }
 
     }
 }

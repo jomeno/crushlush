@@ -142,6 +142,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Api\Controllers\PlaylistsController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Dashboard.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -164,10 +166,16 @@
     <Content Include="Content\Libs\font-awesome-4.6.3\css\font-awesome.css" />
     <Content Include="Content\Libs\font-awesome-4.6.3\css\font-awesome.min.css" />
     <Content Include="Content\Libs\font-awesome-4.6.3\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\Libs\toaster\toaster.css" />
+    <Content Include="Content\Libs\toaster\toaster.js" />
+    <Content Include="Content\Libs\toaster\toaster.min.css" />
+    <Content Include="Content\Libs\toaster\toaster.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\angular-animate.js" />
+    <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
@@ -178,9 +186,11 @@
     <Content Include="Content\Libs\font-awesome-4.6.3\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\Libs\font-awesome-4.6.3\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\Libs\font-awesome-4.6.3\fonts\FontAwesome.otf" />
+    <Content Include="Content\Libs\toaster\toaster.scss" />
     <None Include="Properties\PublishProfiles\crushlush - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\crushlush - Web Deploy.pubxml" />
     <Content Include="Scripts\angular.min.js.map" />
+    <Content Include="Scripts\angular-animate.min.js.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -207,10 +217,7 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Api\Controllers\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
-    <Folder Include="Scripts\App\services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -226,9 +233,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\App\Api.ts" />
     <TypeScriptCompile Include="Scripts\App\App.ts" />
     <TypeScriptCompile Include="Scripts\App\model.ts" />
     <TypeScriptCompile Include="Scripts\App\playlist\controllers\HomeController.ts" />
+    <TypeScriptCompile Include="Scripts\App\services\DataService.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-animate.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-component-router.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\angularjs\angular-cookies.d.ts" />

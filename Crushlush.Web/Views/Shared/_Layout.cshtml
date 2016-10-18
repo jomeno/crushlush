@@ -6,6 +6,7 @@
     <title>@ConfigurationManager.AppSettings["AppTitle"]</title>
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Pacifico|Poiret+One|Shadows+Into+Light" rel="stylesheet">
     <link href="~/Content/Libs/font-awesome-4.6.3/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/Content/Libs/toaster/toaster.min.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -13,15 +14,41 @@
 
     <div lass="container">
         @RenderBody()
-
+        <toaster-container toaster-options="{'position-class': 'toast-top-right'}"></toaster-container>
+        <div class="preloader"><span class="loader"></span><span class="msg">Busy...</span></div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
 
     <script src="~/Scripts/angular.min.js"></script>
+    <script src="~/Scripts/angular-animate.min.js"></script>
+    <script src="~/Content/Libs/toaster/toaster.min.js"></script>
     <script src="~/Scripts/App/App.js"></script>
+    <script src="~/Scripts/App/services/DataService.js"></script>
 
     @RenderSection("scripts", required: false)
+
+    <script type="application/json" id="model">
+        @Html.Raw((Model == null) ? JsonConvert.SerializeObject(string.Empty) : JsonConvert.SerializeObject(Model))
+    </script>
+    <!-- Twitter share -->
+    <script>
+        window.twttr = (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0],
+              t = window.twttr || {};
+            if (d.getElementById(id)) return t;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+
+            t._e = [];
+            t.ready = function (f) {
+                t._e.push(f);
+            };
+
+            return t;
+        }(document, "script", "twitter-wjs"));</script>
 </body>
 </html>
